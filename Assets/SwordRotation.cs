@@ -1,9 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SwordRotation : MonoBehaviour
 {
+    [SerializeField]
+    private float mydistance = 1.5f;
+
     void Update()
     {
         Vector2 parentPos = transform.parent.position;
@@ -11,5 +12,7 @@ public class SwordRotation : MonoBehaviour
         Vector2 direction = mousePos - parentPos;
         float angleNew = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.AngleAxis(angleNew, Vector3.forward);
+
+        transform.position = parentPos + (mydistance * direction.normalized);
     }
 }
