@@ -8,6 +8,8 @@ public class Player_Movement : MonoBehaviour
     private float myJumpForce = 10f;
     [SerializeField]
     private float myDirectionForce = 10f;
+    [SerializeField]
+    private float myMaxVelocity = 10f;
 
     Rigidbody2D myRigidbody;
 
@@ -33,6 +35,9 @@ public class Player_Movement : MonoBehaviour
         {
             myRigidbody.AddForce(new Vector2(0, myJumpForce), ForceMode2D.Impulse);
         }
+        myRigidbody.velocity = new Vector2(
+            Mathf.Clamp(myRigidbody.velocity.x, -myMaxVelocity, myMaxVelocity),
+            myRigidbody.velocity.y);
     }
 
 }
