@@ -11,8 +11,7 @@ public class SwordRotation : MonoBehaviour
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 direction = mousePos - parentPos;
         float angleNew = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.AngleAxis(angleNew, Vector3.forward);
-
-        transform.position = parentPos + (mydistance * direction.normalized);
+        transform.SetPositionAndRotation(parentPos + (mydistance * direction.normalized),
+            Quaternion.AngleAxis(angleNew, Vector3.forward));
     }
 }
