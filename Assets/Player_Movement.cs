@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Player_Movement : MonoBehaviour
@@ -12,6 +10,7 @@ public class Player_Movement : MonoBehaviour
     private float myMaxVelocity = 10f;
 
     Rigidbody2D myRigidbody;
+    private bool isGrounded;
 
     // Start is called before the first frame update
     void Awake()
@@ -31,7 +30,7 @@ public class Player_Movement : MonoBehaviour
             myRigidbody.AddForce(new Vector2(myDirectionForce, 0), ForceMode2D.Force);
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             myRigidbody.AddForce(new Vector2(0, myJumpForce), ForceMode2D.Impulse);
         }
@@ -40,4 +39,19 @@ public class Player_Movement : MonoBehaviour
             myRigidbody.velocity.y);
     }
 
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = true;
+        }
+    }
+
+    void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = false;
+        }
+    }
 }
