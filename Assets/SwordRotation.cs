@@ -14,4 +14,13 @@ public class SwordRotation : MonoBehaviour
         transform.SetPositionAndRotation(parentPos + (mydistance * direction.normalized),
             Quaternion.AngleAxis(angleNew, Vector3.forward));
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        Enemy enemy = collision.gameObject.GetComponent<Enemy>();
+        if (enemy != null)
+        {
+            enemy.TakeDamage(100);
+        }
+    }
 }
