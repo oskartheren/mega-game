@@ -17,10 +17,10 @@ public class SwordRotation : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Enemy enemy = collision.gameObject.GetComponent<Enemy>();
-        if (enemy != null)
+        Health health = collision.gameObject.GetComponent<Health>();
+        if (health != null)
         {
-            enemy.TakeDamage(100);
+            health.TakeDamage(100);
         }
     }
 }
