@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class SwordRotation : MonoBehaviour
@@ -5,7 +7,15 @@ public class SwordRotation : MonoBehaviour
     [SerializeField]
     private float mydistance = 1.5f;
 
+    private readonly List<GameObject> collidingObjects = new List<GameObject>();
+
     void Update()
+    {
+        SetPositionAndRotation();
+        HandleAttack();
+    }
+
+    private void SetPositionAndRotation()
     {
         Vector2 parentPos = transform.parent.position;
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -15,12 +25,21 @@ public class SwordRotation : MonoBehaviour
             Quaternion.AngleAxis(angleNew, Vector3.forward));
     }
 
+    private void HandleAttack()
+    {
+        if (Input.GetKeyDown(KeyCode.Mouse0) || Input.GetKeyDown(KeyCode.E))
+        {
+            collidingObjects.Select(o => o.GetComponent<Health>()).Where(h => h != null).ToList()
+                .ForEach(h => h.TakeDamage(100));
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Health health = collision.gameObject.GetComponent<Health>();
-        if (health != null)
-        {
-            health.TakeDamage(100);
-        }
+        collidingObjects.Add(collision.gameObject);
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        collidingObjects.Remove(collision.gameObject);
     }
 }
