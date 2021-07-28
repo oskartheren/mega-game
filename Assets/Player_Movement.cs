@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Player_Movement : MonoBehaviour
@@ -10,15 +12,14 @@ public class Player_Movement : MonoBehaviour
     private float myMaxVelocity = 10f;
 
     Rigidbody2D myRigidbody;
-    private bool isGrounded;
+    private Dictionary<GameObject, ContactPoint2D> groundContacts
+        = new Dictionary<GameObject, ContactPoint2D>();
 
-    // Start is called before the first frame update
     void Awake()
     {
         myRigidbody = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetKey(KeyCode.A))
@@ -30,28 +31,32 @@ public class Player_Movement : MonoBehaviour
             myRigidbody.AddForce(new Vector2(myDirectionForce, 0), ForceMode2D.Force);
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            myRigidbody.AddForce(new Vector2(0, myJumpForce), ForceMode2D.Impulse);
+            Jump();
         }
         myRigidbody.velocity = new Vector2(
             Mathf.Clamp(myRigidbody.velocity.x, -myMaxVelocity, myMaxVelocity),
             myRigidbody.velocity.y);
     }
 
+    private void Jump()
+    {
+        if (groundContacts.Any(a => a.Value.normal.y == 1.0f))
+        {
+            myRigidbody.AddForce(new Vector2(0, myJumpForce), ForceMode2D.Impulse);
+        }
+    }
+
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Ground"))
         {
-            isGrounded = true;
+            groundContacts.Add(collision.gameObject, collision.GetContact(0));
         }
     }
-
     void OnCollisionExit2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            isGrounded = false;
-        }
+        groundContacts.Remove(collision.gameObject);
     }
 }
