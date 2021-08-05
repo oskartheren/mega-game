@@ -42,10 +42,23 @@ public class Player_Movement : MonoBehaviour
 
     private void Jump()
     {
-        if (groundContacts.Any(a => a.Value.normal.y == 1.0f))
+        if (groundContacts.Any(a => a.Value.normal.y > 0))
         {
-            myRigidbody.AddForce(new Vector2(0, myJumpForce), ForceMode2D.Impulse);
+            Jump(0);
         }
+        else if (groundContacts.Any(a => a.Value.normal.x < 0))
+        {
+            Jump(-1);
+        }
+        else if (groundContacts.Any(a => a.Value.normal.x > 0))
+        {
+            Jump(1);
+        }
+    }
+
+    private void Jump(int xDirection)
+    {
+        myRigidbody.AddForce(new Vector2(xDirection * myJumpForce, myJumpForce), ForceMode2D.Impulse);
     }
 
     void OnCollisionEnter2D(Collision2D collision)
