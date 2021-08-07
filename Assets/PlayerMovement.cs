@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Player_Movement : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
     [SerializeField]
     private float myJumpForce = 10f;
