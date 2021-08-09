@@ -14,6 +14,7 @@ public class PlayerMovement : MonoBehaviour
     Rigidbody2D myRigidbody;
     private Dictionary<GameObject, ContactPoint2D> groundContacts
         = new Dictionary<GameObject, ContactPoint2D>();
+    private bool hasDoubleJumped = false;
 
     void Awake()
     {
@@ -54,6 +55,11 @@ public class PlayerMovement : MonoBehaviour
         {
             Jump(1);
         }
+        else if (!hasDoubleJumped)
+        {
+            Jump(0);
+            hasDoubleJumped = true;
+        }
     }
 
     private void Jump(int xDirection)
@@ -66,6 +72,7 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             groundContacts.Add(collision.gameObject, collision.GetContact(0));
+            hasDoubleJumped = false;
         }
     }
     void OnCollisionExit2D(Collision2D collision)
