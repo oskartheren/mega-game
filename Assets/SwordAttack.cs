@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -5,9 +6,9 @@ using UnityEngine;
 public class SwordAttack : MonoBehaviour
 {
     private readonly List<GameObject> collidingObjects = new List<GameObject>();
-    private readonly int colorFillDelay = 20;
+    private readonly int colorFillDelay = 200;
 
-    private int currentColorFillDelay = 0;
+    private int timeOflastAttack = 0;
     private Material material;
 
     void Start()
@@ -28,9 +29,9 @@ public class SwordAttack : MonoBehaviour
                 .ForEach(h => h.TakeDamage(100));
 
             ChangeAlpha(1.0f);
-            currentColorFillDelay = colorFillDelay;
+            timeOflastAttack = Environment.TickCount;
         }
-        else if (currentColorFillDelay-- == 0)
+        else if (timeOflastAttack + colorFillDelay < Environment.TickCount)
         {
             ChangeAlpha(0.5f);
         }
